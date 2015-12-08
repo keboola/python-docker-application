@@ -11,7 +11,8 @@ class Config(object):
         if (dataDir == ''):
             argparser = argparse.ArgumentParser()
             argparser.add_argument('-d', '--data', dest='dataDir', default='', help='Data directory')
-            args, unknown = argparser.parse_known_args() # unknown is to ignore extra arguments
+            # unknown is to ignore extra arguments
+            args, unknown = argparser.parse_known_args() 
             dataDir = args.dataDir
             if (dataDir == ''):
                 dataDir = os.getenv('KBC_DATA_DIR', '')
@@ -27,16 +28,18 @@ class Config(object):
 
     def writeFileManifest(self, fileName, fileTags=[], isPublic=False, isPermanent=True, notify=False):
         """
-        Write manifest for output file. Manifest is used for the file to be stored in KBC Storage.
-            List with parsed configuration file structure is accessible as configData property.
+        Write manifest for output file. Manifest is used for the file to be 
+        stored in KBC Storage. List with parsed configuration file structure is 
+        accessible as configData property.
         
         Args:
             fileName: Local file name of the file to be stored, including path.
             fileTags: List of file tags.
             isPublic: True if the file should be stored as public.
-            isPermanent: False if the file should be stored only temporarily (for days)
-                otherwise it will be stored until deleted.
-            notify: True if members of the project should be notified about the file upload.
+            isPermanent: False if the file should be stored only temporarily 
+                (for days) otherwise it will be stored until deleted.
+            notify: True if members of the project should be notified 
+                about the file upload.
         """
         manifest = {
             'is_permanent': isPermanent,
@@ -50,7 +53,7 @@ class Config(object):
     def writeTableManifest(self, fileName, destination, primaryKey=[], indexedColumns=[]):
         """
         Write manifest for output table Manifest is used for the table to be stored in KBC Storage.
-        
+
         Args:
             fileName: Local file name of the CSV with table data.
             destination: String name of the table in Storage.
@@ -67,7 +70,7 @@ class Config(object):
     def getParameters(self):
         """
         Get arbitrary parameters passed to the application.
-        
+
         Returns:
             Dict with parameters.
         """
@@ -76,7 +79,7 @@ class Config(object):
     def getInputFiles(self):
         """
         Get names of input files. Returns fully classified pathnames.
-        
+
         Returns:
             List with file names.
         """
@@ -91,10 +94,10 @@ class Config(object):
     def getFileManifest(self, fileName):
         """
         Get additional file information stored in file manifest.
-        
+
         Args:
             fileName: Destination file name (without .manifest extension)
-        
+
         Returns:
             List with manifest options.
         """
@@ -109,8 +112,9 @@ class Config(object):
 
     def getExpectedOutputFiles(self):
         """
-        Get files which are supposed to be returned when the application finishes.
-        
+        Get files which are supposed to be returned 
+        when the application finishes.
+
         Returns:
             Table with output files.
         """
@@ -119,9 +123,9 @@ class Config(object):
 
     def getInputTables(self):
         """
-        Get input tables specified in the configuration file. Tables are identified by
-        their destination (.csv file) or full_path.
-        
+        Get input tables specified in the configuration file. 
+        Tables are identified by their destination (.csv file) or full_path.
+
         Returns:
             Table with output tables.
         """
@@ -135,10 +139,10 @@ class Config(object):
     def getTableManifest(self, tableName):
         """
         Get additional table information stored in table manifest.
-        
+
         Args:
             tableName: Destination table name (name of .csv file).
-        
+
         Returns:
             List with manifest options.
         """
@@ -150,13 +154,19 @@ class Config(object):
         
     def getExpectedOutputTables(self):
         """
-        Get tables which are supposed to be returned when the application finishes.
-        
+        Get tables which are supposed to be returned 
+        when the application finishes.
+
         Returns:
             Table with expected output tables.
         """
         tables = self.configData['storage']['output']['tables']
         for table in tables:
-            table['full_path'] = os.path.join(self.dataDir, 'out', 'tables', table['source'])
+            table['full_path'] = os.path.join(
+                self.dataDir, 
+                'out', 
+                'tables', 
+                table['source']
+            )
         
         return(tables)
