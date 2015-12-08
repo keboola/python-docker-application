@@ -10,3 +10,4 @@ ratings:
   - "**.py"
 exclude_paths:
 - test/**/*
+- .codeclimate.yml

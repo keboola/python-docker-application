@@ -21,8 +21,9 @@ class Config(object):
         try:
             self.configData = json.load(open(os.path.join(dataDir, 'config.json'), 'r'))
         except OSError:
-            raise ValueError("Configuration file config.json not found, verify that the data directory is correct.")
-
+            raise ValueError(
+                "Configuration file config.json not found, verify that the data directory is correct."
+            )
 
     def writeFileManifest(self, fileName, fileTags=[], isPublic=False, isPermanent=True, notify=False):
         """
@@ -46,7 +47,6 @@ class Config(object):
         with open(fileName + '.manifest', 'w') as manifestFile:
             json.dump(manifest, manifestFile)
 
-
     def writeTableManifest(self, fileName, destination, primaryKey=[], indexedColumns=[]):
         """
         Write manifest for output table Manifest is used for the table to be stored in KBC Storage.
@@ -64,7 +64,6 @@ class Config(object):
         with open(fileName + '.manifest', 'w') as manifestFile:
             json.dump(manifest, manifestFile)
 
-
     def getParameters(self):
         """
         Get arbitrary parameters passed to the application.
@@ -73,7 +72,6 @@ class Config(object):
             Dict with parameters.
         """
         return self.configData['parameters']
-
 
     def getInputFiles(self):
         """
@@ -84,12 +82,11 @@ class Config(object):
         """
         filesPath = os.path.join(self.dataDir, 'in', 'files')
         files = []
-        for file in os.listdir(filesPath): 
+        for file in os.listdir(filesPath):
             if os.path.isfile(os.path.join(filesPath, file)) and file[-9:] != '.manifest':
                 files.append(os.path.join(filesPath, file))
         files.sort()
         return(files)
-
 
     def getFileManifest(self, fileName):
         """
@@ -110,7 +107,6 @@ class Config(object):
         manifest = json.load(open(manifestPath))
         return(manifest)
 
-
     def getExpectedOutputFiles(self):
         """
         Get files which are supposed to be returned when the application finishes.
@@ -120,7 +116,6 @@ class Config(object):
         """
         files = self.configData['storage']['output']['files']
         return(files)
-
 
     def getInputTables(self):
         """
@@ -137,7 +132,6 @@ class Config(object):
             )
         return(tables)
 
-
     def getTableManifest(self, tableName):
         """
         Get additional table information stored in table manifest.
@@ -153,7 +147,6 @@ class Config(object):
         manifestPath = os.path.join(self.dataDir, 'in', 'tables', tableName + '.manifest')
         manifest = json.load(open(manifestPath))
         return(manifest)
-
         
     def getExpectedOutputTables(self):
         """
