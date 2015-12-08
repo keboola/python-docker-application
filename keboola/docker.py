@@ -20,7 +20,7 @@ class Config(object):
         self.dataDir = dataDir
         try:
             self.configData = json.load(open(os.path.join(dataDir, 'config.json'), 'r'))
-        except FileNotFoundError:
+        except OSError:
             raise ValueError("Configuration file config.json not found, verify that the data directory is correct.")
 
 
