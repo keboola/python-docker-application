@@ -28,7 +28,13 @@ class Config(object):
                 "Configuration file config.json not found, verify that the data directory is correct."
             )
 
-    def writeFileManifest(self, fileName, fileTags=[], isPublic=False, isPermanent=True, notify=False):
+    def writeFileManifest(
+            self,
+            fileName,
+            fileTags=[],
+            isPublic=False,
+            isPermanent=True,
+            notify=False):
         """
         Write manifest for output file. Manifest is used for the file to be
         stored in KBC Storage. List with parsed configuration file structure is
@@ -52,9 +58,15 @@ class Config(object):
         with open(fileName + '.manifest', 'w') as manifestFile:
             json.dump(manifest, manifestFile)
 
-    def writeTableManifest(self, fileName, destination, primaryKey=[], indexedColumns=[]):
+    def writeTableManifest(
+            self,
+            fileName,
+            destination,
+            primaryKey=[],
+            indexedColumns=[]):
         """
-        Write manifest for output table Manifest is used for the table to be stored in KBC Storage.
+        Write manifest for output table Manifest is used for
+        the table to be stored in KBC Storage.
 
         Args:
             fileName: Local file name of the CSV with table data.
@@ -88,7 +100,8 @@ class Config(object):
         filesPath = os.path.join(self.dataDir, 'in', 'files')
         files = []
         for file in os.listdir(filesPath):
-            if os.path.isfile(os.path.join(filesPath, file)) and file[-9:] != '.manifest':
+            if os.path.isfile(os.path.join(filesPath, file))
+                    and file[-9:] != '.manifest':
                 files.append(os.path.join(filesPath, file))
         files.sort()
         return(files)
@@ -134,7 +147,12 @@ class Config(object):
         tables = self.configData['storage']['input']['tables']
         for table in tables:
             table['full_path'] = os.path.normpath(
-                os.path.join(self.dataDir, 'in', 'tables', table['destination'])
+                os.path.join(
+                    self.dataDir,
+                    'in',
+                    'tables',
+                    table['destination']
+                )
             )
         return(tables)
 
