@@ -10,7 +10,13 @@ class Config(object):
         self.dataDir = ''
         if (dataDir == ''):
             argparser = argparse.ArgumentParser()
-            argparser.add_argument('-d', '--data', dest='dataDir', default='', help='Data directory')
+            argparser.add_argument(
+                '-d',
+                '--data',
+                dest='dataDir',
+                default='',
+                help='Data directory'
+            )
             # unknown is to ignore extra arguments
             args, unknown = argparser.parse_known_args()
             dataDir = args.dataDir
@@ -25,7 +31,8 @@ class Config(object):
             )
         except (OSError, IOError):
             raise ValueError(
-                "Configuration file config.json not found, verify that the data directory is correct."
+                "Configuration file config.json not found, " +
+                "verify that the data directory is correct."
             )
 
     def writeFileManifest(
@@ -101,7 +108,7 @@ class Config(object):
         files = []
         for file in os.listdir(filesPath):
             if os.path.isfile(os.path.join(filesPath, file))
-                    and file[-9:] != '.manifest':
+            and file[-9:] != '.manifest':
                 files.append(os.path.join(filesPath, file))
         files.sort()
         return(files)
