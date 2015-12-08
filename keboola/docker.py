@@ -12,7 +12,7 @@ class Config(object):
             argparser = argparse.ArgumentParser()
             argparser.add_argument('-d', '--data', dest='dataDir', default='', help='Data directory')
             # unknown is to ignore extra arguments
-            args, unknown = argparser.parse_known_args() 
+            args, unknown = argparser.parse_known_args()
             dataDir = args.dataDir
             if (dataDir == ''):
                 dataDir = os.getenv('KBC_DATA_DIR', '')
@@ -20,7 +20,9 @@ class Config(object):
                     dataDir = '/data/'
         self.dataDir = dataDir
         try:
-            self.configData = json.load(open(os.path.join(dataDir, 'config.json'), 'r'))
+            self.configData = json.load(
+                open(os.path.join(dataDir, 'config.json'), 'r')
+            )
         except (OSError, IOError):
             raise ValueError(
                 "Configuration file config.json not found, verify that the data directory is correct."
@@ -28,17 +30,17 @@ class Config(object):
 
     def writeFileManifest(self, fileName, fileTags=[], isPublic=False, isPermanent=True, notify=False):
         """
-        Write manifest for output file. Manifest is used for the file to be 
-        stored in KBC Storage. List with parsed configuration file structure is 
+        Write manifest for output file. Manifest is used for the file to be
+        stored in KBC Storage. List with parsed configuration file structure is
         accessible as configData property.
-        
+
         Args:
             fileName: Local file name of the file to be stored, including path.
             fileTags: List of file tags.
             isPublic: True if the file should be stored as public.
-            isPermanent: False if the file should be stored only temporarily 
+            isPermanent: False if the file should be stored only temporarily
                 (for days) otherwise it will be stored until deleted.
-            notify: True if members of the project should be notified 
+            notify: True if members of the project should be notified
                 about the file upload.
         """
         manifest = {
@@ -58,7 +60,7 @@ class Config(object):
             fileName: Local file name of the CSV with table data.
             destination: String name of the table in Storage.
             primaryKey: List with names of columns used for primary key.
-        
+
         """
         manifest = {
             'destination': destination,
@@ -105,14 +107,14 @@ class Config(object):
         baseDir = os.path.normpath(os.path.join(self.dataDir, 'in', 'files'))
         if (fileName[0:len(baseDir)] != baseDir):
             fileName = os.path.join(baseDir, fileName)
-       
+
         manifestPath = fileName + '.manifest'
         manifest = json.load(open(manifestPath))
         return(manifest)
 
     def getExpectedOutputFiles(self):
         """
-        Get files which are supposed to be returned 
+        Get files which are supposed to be returned
         when the application finishes.
 
         Returns:
@@ -123,7 +125,7 @@ class Config(object):
 
     def getInputTables(self):
         """
-        Get input tables specified in the configuration file. 
+        Get input tables specified in the configuration file.
         Tables are identified by their destination (.csv file) or full_path.
 
         Returns:
@@ -148,13 +150,18 @@ class Config(object):
         """
         if (tableName[-4:] != '.csv'):
             tableName += '.csv'
-        manifestPath = os.path.join(self.dataDir, 'in', 'tables', tableName + '.manifest')
+        manifestPath = os.path.join(
+            self.dataDir,
+            'in',
+            'tables',
+            tableName + '.manifest'
+        )
         manifest = json.load(open(manifestPath))
         return(manifest)
-        
+
     def getExpectedOutputTables(self):
         """
-        Get tables which are supposed to be returned 
+        Get tables which are supposed to be returned
         when the application finishes.
 
         Returns:
@@ -163,10 +170,10 @@ class Config(object):
         tables = self.configData['storage']['output']['tables']
         for table in tables:
             table['full_path'] = os.path.join(
-                self.dataDir, 
-                'out', 
-                'tables', 
+                self.dataDir,
+                'out',
+                'tables',
                 table['source']
             )
-        
+
         return(tables)
