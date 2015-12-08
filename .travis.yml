@@ -1,0 +1,10 @@
+language: python
+python:
+	- "2.7"
+	- "3.5"
+
+script:
+	- py.test --dataDir=./test/data --cov=keboola --cov-report term-missing
+
+notifications:
+  slack: keboola:8EW7Y0Kqvxxames1Rfp6feaE

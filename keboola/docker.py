@@ -3,13 +3,14 @@ import json
 import os
 import sys
 
+
 class Config(object):
-    def __init__(self, dataDir = ''):
+    def __init__(self, dataDir=''):
         self.configData = []
-        self.dataDir = ''        
+        self.dataDir = ''
         if (dataDir == ''):
             argparser = argparse.ArgumentParser()
-            argparser.add_argument('-d', '--data', dest = 'dataDir', default = '', help = 'Data directory')
+            argparser.add_argument('-d', '--data', dest='dataDir', default='', help='Data directory')
             args, unknown = argparser.parse_known_args() # unknown is to ignore extra arguments
             dataDir = args.dataDir
             if (dataDir == ''):
@@ -21,9 +22,9 @@ class Config(object):
             self.configData = json.load(open(os.path.join(dataDir, 'config.json'), 'r'))
         except FileNotFoundError:
             raise ValueError("Configuration file config.json not found, verify that the data directory is correct.")
-   
-    
-    def writeFileManifest(self, fileName, fileTags = [], isPublic = False, isPermanent = True, notify = False):
+
+
+    def writeFileManifest(self, fileName, fileTags=[], isPublic=False, isPermanent=True, notify=False):
         """
         Write manifest for output file. Manifest is used for the file to be stored in KBC Storage.
             List with parsed configuration file structure is accessible as configData property.
@@ -44,9 +45,9 @@ class Config(object):
         }
         with open(fileName + '.manifest', 'w') as manifestFile:
             json.dump(manifest, manifestFile)
-    
-    
-    def writeTableManifest(self, fileName, destination, primaryKey = [], indexedColumns = []):
+
+
+    def writeTableManifest(self, fileName, destination, primaryKey=[], indexedColumns=[]):
         """
         Write manifest for output table Manifest is used for the table to be stored in KBC Storage.
         
@@ -62,7 +63,8 @@ class Config(object):
         }
         with open(fileName + '.manifest', 'w') as manifestFile:
             json.dump(manifest, manifestFile)
-    
+
+
     def getParameters(self):
         """
         Get arbitrary parameters passed to the application.
@@ -71,8 +73,8 @@ class Config(object):
             Dict with parameters.
         """
         return self.configData['parameters']
-    
-        
+
+
     def getInputFiles(self):
         """
         Get names of input files. Returns fully classified pathnames.
@@ -87,8 +89,8 @@ class Config(object):
                 files.append(os.path.join(filesPath, file))
         files.sort()
         return(files)
-   
-        
+
+
     def getFileManifest(self, fileName):
         """
         Get additional file information stored in file manifest.
@@ -107,8 +109,8 @@ class Config(object):
         manifestPath = fileName + '.manifest'
         manifest = json.load(open(manifestPath))
         return(manifest)
-        
-               
+
+
     def getExpectedOutputFiles(self):
         """
         Get files which are supposed to be returned when the application finishes.
@@ -118,8 +120,8 @@ class Config(object):
         """
         files = self.configData['storage']['output']['files']
         return(files)
-        
-   
+
+
     def getInputTables(self):
         """
         Get input tables specified in the configuration file. Tables are identified by
@@ -130,10 +132,12 @@ class Config(object):
         """
         tables = self.configData['storage']['input']['tables']
         for table in tables:
-            table['full_path'] = os.path.normpath(os.path.join(self.dataDir, 'in', 'tables', table['destination']))
+            table['full_path'] = os.path.normpath(
+                os.path.join(self.dataDir, 'in', 'tables', table['destination'])
+            )
         return(tables)
-   
-        
+
+
     def getTableManifest(self, tableName):
         """
         Get additional table information stored in table manifest.
