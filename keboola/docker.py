@@ -107,8 +107,8 @@ class Config(object):
         filesPath = os.path.join(self.dataDir, 'in', 'files')
         files = []
         for file in os.listdir(filesPath):
-            if os.path.isfile(os.path.join(filesPath, file))
-            and file[-9:] != '.manifest':
+            if (os.path.isfile(os.path.join(filesPath, file))
+            and file[-9:] != '.manifest'):
                 files.append(os.path.join(filesPath, file))
         files.sort()
         return(files)
