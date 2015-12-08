@@ -24,4 +24,4 @@ cfg = docker.Config('/data/')
 params = cfg.getParameters()
 ```
 
-See [documentation]() for list of available functions.
+See documentation [in doc directory](https://github.com/keboola/python-docker-application/tree/master/doc) for full list of available functions.
