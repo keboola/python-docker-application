@@ -19,7 +19,6 @@ class TestDockerConfig:
             cfg = docker.Config()
             pytest.xfail("Must raise exception.")
         except (ValueError):
-            assert cfg.dataDir == '/data/'
             pass
 
 

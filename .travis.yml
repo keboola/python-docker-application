@@ -1,10 +1,14 @@
 language: python
-notifications: 
-  slack: "keboola:8EW7Y0Kqvxxames1Rfp6feaE"
+
 python: 
   - "2.7"
   - "3.5"
+
 install: 
   - "pip install pytest-cov"
+
 script: 
   - "py.test --dataDir=./test/data --cov=keboola --cov-report term-missing"
+
+notifications: 
+  slack: "keboola:fym2t4112jahUATYBYFS3oBS"
