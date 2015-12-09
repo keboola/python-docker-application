@@ -13,7 +13,7 @@ Installation
 pip install git+git://github.com/keboola/python-docker-application.git
 ```
 
-Note that in production containers in KBC, the library is already installed.
+Note that the library is already installed in production containers in KBC.
 
 Usage
 ============
