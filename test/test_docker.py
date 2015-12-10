@@ -63,7 +63,6 @@ class TestDockerConfig:
         assert len(files) == 1
         assert 'processed.png' == files[0]['source']    
     
-    
     def test_getFileManifest(self, dataDir):
         cfg = docker.Config(dataDir)
         files = cfg.getInputFiles()
@@ -73,7 +72,6 @@ class TestDockerConfig:
         assert ['dilbert'] == file1['tags']
         file2 = cfg.getFileManifest('151971405_21702.strip.print.gif')
         assert file1 == file2    
-
 
     def test_getInputTables(self, dataDir):    
         cfg = docker.Config(dataDir)
@@ -88,7 +86,6 @@ class TestDockerConfig:
                 assert 'in.c-main.test2' == table['source']
                 assert True == os.path.isfile(table['full_path'])       
     
-    
     def test_getTableManifest(self, dataDir):
         cfg = docker.Config(dataDir)
         table1 = cfg.getTableManifest('sample.csv')
@@ -98,10 +95,18 @@ class TestDockerConfig:
         table2 = cfg.getTableManifest('sample')
         assert table1 == table2
     
-    
     def test_getOutputTables(self, dataDir):
         cfg = docker.Config(dataDir)
         tables = cfg.getExpectedOutputTables()
         assert 2 == len(tables)
         assert 'results.csv' == tables[0]['source']
         assert 'results-new.csv' == tables[1]['source']
+
+    def test_emptyStorage(self, dataDir):
+        cfg = docker.Config(dataDir + '/../data2/')        
+        assert [] == cfg.getExpectedOutputTables()
+        assert [] == cfg.getExpectedOutputFiles()
+        assert [] == cfg.getInputTables()
+        assert [] == cfg.getInputFiles()
+        assert {} == cfg.getParameters()
+        

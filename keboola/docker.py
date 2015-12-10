@@ -32,7 +32,8 @@ class Config(object):
         except (OSError, IOError):
             raise ValueError(
                 "Configuration file config.json not found, " +
-                "verify that the data directory is correct."
+                "verify that the data directory is correct." +
+                "Dir: " + self.dataDir
             )
 
     def writeFileManifest(
@@ -95,7 +96,10 @@ class Config(object):
         Returns:
             Dict with parameters.
         """
-        return self.configData['parameters']
+        if ('parameters' in self.configData):
+            return(self.configData['parameters'])
+        else:
+            return({})
 
     def getInputFiles(self):
         """
@@ -108,10 +112,10 @@ class Config(object):
         files = []
         for file in os.listdir(filesPath):
             if (os.path.isfile(os.path.join(filesPath, file)) and
-                    file[-9:] != '.manifest'):
+                    file[-9:] != '.manifest') and file[:1] != '.':
                 files.append(os.path.join(filesPath, file))
         files.sort()
-        return(files)
+        return files
 
     def getFileManifest(self, fileName):
         """
@@ -138,10 +142,15 @@ class Config(object):
         when the application finishes.
 
         Returns:
-            Table with output files.
+            List with dictionaries with output file properties.
         """
-        files = self.configData['storage']['output']['files']
-        return(files)
+        if (('storage' in self.configData) and
+                ('output' in self.configData['storage']) and
+                ('files') in self.configData['storage']['output']):
+            files = self.configData['storage']['output']['files']
+            return(files)
+        else:
+            return([])
 
     def getInputTables(self):
         """
@@ -149,19 +158,24 @@ class Config(object):
         Tables are identified by their destination (.csv file) or full_path.
 
         Returns:
-            Table with output tables.
+            List of dictionaries with output tables properties.
         """
-        tables = self.configData['storage']['input']['tables']
-        for table in tables:
-            table['full_path'] = os.path.normpath(
-                os.path.join(
-                    self.dataDir,
-                    'in',
-                    'tables',
-                    table['destination']
+        if (('storage' in self.configData) and
+                ('input' in self.configData['storage']) and
+                ('tables') in self.configData['storage']['input']):
+            tables = self.configData['storage']['input']['tables']
+            for table in tables:
+                table['full_path'] = os.path.normpath(
+                    os.path.join(
+                        self.dataDir,
+                        'in',
+                        'tables',
+                        table['destination']
+                    )
                 )
-            )
-        return(tables)
+            return(tables)
+        else:
+            return([])
 
     def getTableManifest(self, tableName):
         """
@@ -190,15 +204,19 @@ class Config(object):
         when the application finishes.
 
         Returns:
-            Table with expected output tables.
+            List of dictionaries with expected output tables.
         """
-        tables = self.configData['storage']['output']['tables']
-        for table in tables:
-            table['full_path'] = os.path.join(
-                self.dataDir,
-                'out',
-                'tables',
-                table['source']
-            )
-
-        return(tables)
+        if (('storage' in self.configData) and
+                ('output' in self.configData['storage']) and
+                ('tables') in self.configData['storage']['output']):
+            tables = self.configData['storage']['output']['tables']
+            for table in tables:
+                table['full_path'] = os.path.join(
+                    self.dataDir,
+                    'out',
+                    'tables',
+                    table['source']
+                )
+            return(tables)
+        else:
+            return([])
