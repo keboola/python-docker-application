@@ -29,6 +29,9 @@ class TestDockerConfig:
         assert params['fooBar']['foo'] == 42
         assert params['fooBar']['bar'] == 24
    
+    def test_getDataDir(self, dataDir):
+        cfg = docker.Config(dataDir)
+        assert dataDir == cfg.getDataDir()
    
     def test_fileManifest(self, dataDir):
         cfg = docker.Config(dataDir)

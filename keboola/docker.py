@@ -221,7 +221,7 @@ class Config(object):
         else:
             return([])
 
-    def getDataDir():
+    def getDataDir(self):
         """
         Get current working directory.
 
