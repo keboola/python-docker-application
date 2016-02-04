@@ -5,10 +5,10 @@ import sys
 
 
 class Config(object):
-    def __init__(self, dataDir=None):
+    def __init__(self, dataDir=''):
         self.configData = []
         self.dataDir = ''
-        if (dataDir is None):
+        if (dataDir == ''):
             argparser = argparse.ArgumentParser()
             argparser.add_argument(
                 '-d',
