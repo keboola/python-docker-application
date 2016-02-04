@@ -8,7 +8,7 @@ class Config(object):
     def __init__(self, dataDir=''):
         self.configData = []
         self.dataDir = ''
-        if (dataDir == ''):
+        if (dataDir == '' or dataDir is None):
             argparser = argparse.ArgumentParser()
             argparser.add_argument(
                 '-d',
@@ -220,3 +220,12 @@ class Config(object):
             return(tables)
         else:
             return([])
+
+    def getDataDir():
+        """
+        Get current working directory.
+
+        Returns:
+            String directory name.
+        """
+        return(self.dataDir)
