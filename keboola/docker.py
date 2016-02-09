@@ -3,9 +3,9 @@ import json
 import os
 import sys
 
-
 class Config(object):
     def __init__(self, dataDir=''):
+        csv.register_dialect('kbc', lineterminator='\n', delimiter = ',', quotechar = '"')
         self.configData = []
         self.dataDir = ''
         if (dataDir == '' or dataDir is None):
