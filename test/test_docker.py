@@ -46,7 +46,7 @@ class TestDockerConfig:
         cfg.write_table_manifest(some_file, 'out.c-main.some-table', primary_key=['foo', 'bar'])
         manifest_file = some_file + '.manifest'
         config = json.load(open(manifest_file))
-        assert {'destination': 'out.c-main.some-table', 'primary_key': ['foo', 'bar'], 'indexed_columns': []} == config
+        assert {'destination': 'out.c-main.some-table', 'primary_key': ['foo', 'bar']} == config
         os.remove(manifest_file)
 
     def test_input_files(self, data_dir):

@@ -71,8 +71,7 @@ class Config(object):
             self,
             file_name,
             destination,
-            primary_key=[],
-            indexed_columns=[]):
+            primary_key=[]):
         """
         Write manifest for output table Manifest is used for
         the table to be stored in KBC Storage.
@@ -81,12 +80,10 @@ class Config(object):
             file_name: Local file name of the CSV with table data.
             destination: String name of the table in Storage.
             primary_key: List with names of columns used for primary key.
-            indexed_columns: List of columns with indexes.
         """
         manifest = {
             'destination': destination,
-            'primary_key': primary_key,
-            'indexed_columns': indexed_columns
+            'primary_key': primary_key            
         }
         with open(file_name + '.manifest', 'w') as manifest_file:
             json.dump(manifest, manifest_file)

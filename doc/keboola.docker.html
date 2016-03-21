@@ -18,9 +18,9 @@
     
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="argparse.html">argparse</a><br>
+</td><td width="25%" valign=top><a href="csv.html">csv</a><br>
 </td><td width="25%" valign=top><a href="json.html">json</a><br>
 </td><td width="25%" valign=top><a href="os.html">os</a><br>
-</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
 </td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
@@ -44,77 +44,78 @@
     
 <tr><td bgcolor="#ffc8d8"><tt>&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
-<dl><dt><a name="Config-__init__"><strong>__init__</strong></a>(self, dataDir='')</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
+<dl><dt><a name="Config-__init__"><strong>__init__</strong></a>(self, data_dir='')</dt><dd><tt>Initialize&nbsp;self.&nbsp;&nbsp;See&nbsp;help(type(self))&nbsp;for&nbsp;accurate&nbsp;signature.</tt></dd></dl>
 
-<dl><dt><a name="Config-getDataDir"><strong>getDataDir</strong></a>(self)</dt><dd><tt>Get&nbsp;current&nbsp;working&nbsp;directory.<br>
+<dl><dt><a name="Config-get_data_dir"><strong>get_data_dir</strong></a>(self)</dt><dd><tt>Get&nbsp;current&nbsp;working&nbsp;directory.<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;String&nbsp;directory&nbsp;name.</tt></dd></dl>
 
-<dl><dt><a name="Config-getExpectedOutputFiles"><strong>getExpectedOutputFiles</strong></a>(self)</dt><dd><tt>Get&nbsp;files&nbsp;which&nbsp;are&nbsp;supposed&nbsp;to&nbsp;be&nbsp;returned<br>
+<dl><dt><a name="Config-get_expected_output_files"><strong>get_expected_output_files</strong></a>(self)</dt><dd><tt>Get&nbsp;files&nbsp;which&nbsp;are&nbsp;supposed&nbsp;to&nbsp;be&nbsp;returned<br>
 when&nbsp;the&nbsp;application&nbsp;finishes.<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;List&nbsp;with&nbsp;dictionaries&nbsp;with&nbsp;output&nbsp;file&nbsp;properties.</tt></dd></dl>
 
-<dl><dt><a name="Config-getExpectedOutputTables"><strong>getExpectedOutputTables</strong></a>(self)</dt><dd><tt>Get&nbsp;tables&nbsp;which&nbsp;are&nbsp;supposed&nbsp;to&nbsp;be&nbsp;returned<br>
+<dl><dt><a name="Config-get_expected_output_tables"><strong>get_expected_output_tables</strong></a>(self)</dt><dd><tt>Get&nbsp;tables&nbsp;which&nbsp;are&nbsp;supposed&nbsp;to&nbsp;be&nbsp;returned<br>
 when&nbsp;the&nbsp;application&nbsp;finishes.<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;List&nbsp;of&nbsp;dictionaries&nbsp;with&nbsp;expected&nbsp;output&nbsp;tables.</tt></dd></dl>
 
-<dl><dt><a name="Config-getFileManifest"><strong>getFileManifest</strong></a>(self, fileName)</dt><dd><tt>Get&nbsp;additional&nbsp;file&nbsp;information&nbsp;stored&nbsp;in&nbsp;file&nbsp;manifest.<br>
+<dl><dt><a name="Config-get_file_manifest"><strong>get_file_manifest</strong></a>(self, file_name)</dt><dd><tt>Get&nbsp;additional&nbsp;file&nbsp;information&nbsp;stored&nbsp;in&nbsp;file&nbsp;manifest.<br>
 &nbsp;<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;fileName:&nbsp;Destination&nbsp;file&nbsp;name&nbsp;(without&nbsp;.manifest&nbsp;extension)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;file_name:&nbsp;Destination&nbsp;file&nbsp;name&nbsp;(without&nbsp;.manifest&nbsp;extension)<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;List&nbsp;with&nbsp;manifest&nbsp;options.</tt></dd></dl>
 
-<dl><dt><a name="Config-getInputFiles"><strong>getInputFiles</strong></a>(self)</dt><dd><tt>Get&nbsp;names&nbsp;of&nbsp;input&nbsp;files.&nbsp;Returns&nbsp;fully&nbsp;classified&nbsp;pathnames.<br>
+<dl><dt><a name="Config-get_input_files"><strong>get_input_files</strong></a>(self)</dt><dd><tt>Get&nbsp;names&nbsp;of&nbsp;input&nbsp;files.&nbsp;Returns&nbsp;fully&nbsp;classified&nbsp;pathnames.<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;List&nbsp;with&nbsp;file&nbsp;names.</tt></dd></dl>
 
-<dl><dt><a name="Config-getInputTables"><strong>getInputTables</strong></a>(self)</dt><dd><tt>Get&nbsp;input&nbsp;tables&nbsp;specified&nbsp;in&nbsp;the&nbsp;configuration&nbsp;file.<br>
+<dl><dt><a name="Config-get_input_tables"><strong>get_input_tables</strong></a>(self)</dt><dd><tt>Get&nbsp;input&nbsp;tables&nbsp;specified&nbsp;in&nbsp;the&nbsp;configuration&nbsp;file.<br>
 Tables&nbsp;are&nbsp;identified&nbsp;by&nbsp;their&nbsp;destination&nbsp;(.csv&nbsp;file)&nbsp;or&nbsp;full_path.<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;List&nbsp;of&nbsp;dictionaries&nbsp;with&nbsp;output&nbsp;tables&nbsp;properties.</tt></dd></dl>
 
-<dl><dt><a name="Config-getParameters"><strong>getParameters</strong></a>(self)</dt><dd><tt>Get&nbsp;arbitrary&nbsp;parameters&nbsp;passed&nbsp;to&nbsp;the&nbsp;application.<br>
+<dl><dt><a name="Config-get_parameters"><strong>get_parameters</strong></a>(self)</dt><dd><tt>Get&nbsp;arbitrary&nbsp;parameters&nbsp;passed&nbsp;to&nbsp;the&nbsp;application.<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Dict&nbsp;with&nbsp;parameters.</tt></dd></dl>
 
-<dl><dt><a name="Config-getTableManifest"><strong>getTableManifest</strong></a>(self, tableName)</dt><dd><tt>Get&nbsp;additional&nbsp;table&nbsp;information&nbsp;stored&nbsp;in&nbsp;table&nbsp;manifest.<br>
+<dl><dt><a name="Config-get_table_manifest"><strong>get_table_manifest</strong></a>(self, table_name)</dt><dd><tt>Get&nbsp;additional&nbsp;table&nbsp;information&nbsp;stored&nbsp;in&nbsp;table&nbsp;manifest.<br>
 &nbsp;<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;tableName:&nbsp;Destination&nbsp;table&nbsp;name&nbsp;(name&nbsp;of&nbsp;.csv&nbsp;file).<br>
+&nbsp;&nbsp;&nbsp;&nbsp;table_name:&nbsp;Destination&nbsp;table&nbsp;name&nbsp;(name&nbsp;of&nbsp;.csv&nbsp;file).<br>
 &nbsp;<br>
 Returns:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;List&nbsp;with&nbsp;manifest&nbsp;options.</tt></dd></dl>
 
-<dl><dt><a name="Config-writeFileManifest"><strong>writeFileManifest</strong></a>(self, fileName, fileTags=[], isPublic=False, isPermanent=True, notify=False)</dt><dd><tt>Write&nbsp;manifest&nbsp;for&nbsp;output&nbsp;file.&nbsp;Manifest&nbsp;is&nbsp;used&nbsp;for&nbsp;the&nbsp;file&nbsp;to&nbsp;be<br>
+<dl><dt><a name="Config-write_file_manifest"><strong>write_file_manifest</strong></a>(self, file_name, file_tags=[], is_public=False, is_permanent=True, notify=False)</dt><dd><tt>Write&nbsp;manifest&nbsp;for&nbsp;output&nbsp;file.&nbsp;Manifest&nbsp;is&nbsp;used&nbsp;for&nbsp;the&nbsp;file&nbsp;to&nbsp;be<br>
 stored&nbsp;in&nbsp;KBC&nbsp;Storage.&nbsp;List&nbsp;with&nbsp;parsed&nbsp;configuration&nbsp;file&nbsp;structure&nbsp;is<br>
-accessible&nbsp;as&nbsp;configData&nbsp;property.<br>
+accessible&nbsp;as&nbsp;config_data&nbsp;property.<br>
 &nbsp;<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;fileName:&nbsp;Local&nbsp;file&nbsp;name&nbsp;of&nbsp;the&nbsp;file&nbsp;to&nbsp;be&nbsp;stored,&nbsp;including&nbsp;path.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;fileTags:&nbsp;List&nbsp;of&nbsp;file&nbsp;tags.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;isPublic:&nbsp;True&nbsp;if&nbsp;the&nbsp;file&nbsp;should&nbsp;be&nbsp;stored&nbsp;as&nbsp;public.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;isPermanent:&nbsp;False&nbsp;if&nbsp;the&nbsp;file&nbsp;should&nbsp;be&nbsp;stored&nbsp;only&nbsp;temporarily<br>
+&nbsp;&nbsp;&nbsp;&nbsp;file_name:&nbsp;Local&nbsp;file&nbsp;name&nbsp;of&nbsp;the&nbsp;file&nbsp;to&nbsp;be&nbsp;stored,&nbsp;including&nbsp;path.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;file_tags:&nbsp;List&nbsp;of&nbsp;file&nbsp;tags.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;is_public:&nbsp;True&nbsp;if&nbsp;the&nbsp;file&nbsp;should&nbsp;be&nbsp;stored&nbsp;as&nbsp;public.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;is_permanent:&nbsp;False&nbsp;if&nbsp;the&nbsp;file&nbsp;should&nbsp;be&nbsp;stored&nbsp;only&nbsp;temporarily<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(for&nbsp;days)&nbsp;otherwise&nbsp;it&nbsp;will&nbsp;be&nbsp;stored&nbsp;until&nbsp;deleted.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;notify:&nbsp;True&nbsp;if&nbsp;members&nbsp;of&nbsp;the&nbsp;project&nbsp;should&nbsp;be&nbsp;notified<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;about&nbsp;the&nbsp;file&nbsp;upload.</tt></dd></dl>
 
-<dl><dt><a name="Config-writeTableManifest"><strong>writeTableManifest</strong></a>(self, fileName, destination, primaryKey=[], indexedColumns=[])</dt><dd><tt>Write&nbsp;manifest&nbsp;for&nbsp;output&nbsp;table&nbsp;Manifest&nbsp;is&nbsp;used&nbsp;for<br>
+<dl><dt><a name="Config-write_table_manifest"><strong>write_table_manifest</strong></a>(self, file_name, destination, primary_key=[], indexed_columns=[])</dt><dd><tt>Write&nbsp;manifest&nbsp;for&nbsp;output&nbsp;table&nbsp;Manifest&nbsp;is&nbsp;used&nbsp;for<br>
 the&nbsp;table&nbsp;to&nbsp;be&nbsp;stored&nbsp;in&nbsp;KBC&nbsp;Storage.<br>
 &nbsp;<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;fileName:&nbsp;Local&nbsp;file&nbsp;name&nbsp;of&nbsp;the&nbsp;CSV&nbsp;with&nbsp;table&nbsp;data.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;file_name:&nbsp;Local&nbsp;file&nbsp;name&nbsp;of&nbsp;the&nbsp;CSV&nbsp;with&nbsp;table&nbsp;data.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;destination:&nbsp;String&nbsp;name&nbsp;of&nbsp;the&nbsp;table&nbsp;in&nbsp;Storage.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;primaryKey:&nbsp;List&nbsp;with&nbsp;names&nbsp;of&nbsp;columns&nbsp;used&nbsp;for&nbsp;primary&nbsp;key.</tt></dd></dl>
+&nbsp;&nbsp;&nbsp;&nbsp;primary_key:&nbsp;List&nbsp;with&nbsp;names&nbsp;of&nbsp;columns&nbsp;used&nbsp;for&nbsp;primary&nbsp;key.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;indexed_columns:&nbsp;List&nbsp;of&nbsp;columns&nbsp;with&nbsp;indexes.</tt></dd></dl>
 
 <hr>
 Data descriptors defined here:<br>
