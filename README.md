@@ -21,7 +21,7 @@ Basic usage:
 ```
 from keboola import docker
 cfg = docker.Config('/data/')
-params = cfg.getParameters()
+params = cfg.get_parameters()
 ```
 
 See documentation [in doc directory](https://github.com/keboola/python-docker-application/tree/master/doc) for full list of available functions. See [development guide](http://developers.keboola.com/extend/custom-science/python/) for help with KBC integration.
