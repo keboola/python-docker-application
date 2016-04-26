@@ -27,6 +27,16 @@ class TestDockerConfig:
         assert params['fooBar']['foo'] == 42
         assert params['fooBar']['bar'] == 24
 
+    def test_get_action(self, data_dir):
+        cfg = docker.Config(data_dir)
+        action = cfg.get_action()
+        assert action == 'test'
+
+    def test_get_action_empty_config(self, data_dir):
+        cfg = docker.Config(data_dir + '/../data2/')
+        action = cfg.get_action()
+        assert action == ''
+
     def test_get_data_dir(self, data_dir):
         cfg = docker.Config(data_dir)
         assert data_dir == cfg.get_data_dir()
