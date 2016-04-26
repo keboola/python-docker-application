@@ -100,6 +100,18 @@ class Config(object):
         else:
             return({})
 
+    def get_action(self):
+        """
+        Get action parameter passed to the configuration.
+
+        Returns:
+            String.
+        """
+        if ('action' in self.config_data):
+            return(self.config_data['action'])
+        else:
+            return('')
+
     def get_input_files(self):
         """
         Get names of input files. Returns fully classified pathnames.
