@@ -83,7 +83,7 @@ class Config(object):
         """
         manifest = {
             'destination': destination,
-            'primary_key': primary_key            
+            'primary_key': primary_key
         }
         with open(file_name + '.manifest', 'w') as manifest_file:
             json.dump(manifest, manifest_file)
