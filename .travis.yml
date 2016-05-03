@@ -5,7 +5,7 @@ python:
   - 3.5
 
 env:
-  - KBC_DATADIR=$TRAVIS_BUILD_DIR/test/data/
+  - KBC_DATADIR=$TRAVIS_BUILD_DIR/test/data1/
 
 install:
   - pip install pytest-cov
