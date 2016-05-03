@@ -4,11 +4,11 @@ python:
   - 2.7
   - 3.5
 
+before_install:
+ - export KBC_DATADIR=$TRAVIS_BUILD_DIR/tests/data/
+
 install:
   - pip install pytest-cov
-
-env:
-  - KBC_DATADIR=$TRAVIS_BUILD_DIR/test/data1/
 
 script:
   - py.test --cov=keboola --cov-report term-missing
