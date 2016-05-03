@@ -1,14 +1,17 @@
 language: python
 
-python: 
-  - "2.7"
-  - "3.5"
+python:
+  - 2.7
+  - 3.5
 
-install: 
-  - "pip install pytest-cov"
+install:
+  - pip install pytest-cov
 
-script: 
-  - "py.test --data=./test/data1 --cov=keboola --cov-report term-missing"
+env:
+  - KBC_DATADIR=${TRAVIS_BUILD_DIR}/test/data1/
 
-notifications: 
+script:
+  - py.test --cov=keboola --cov-report term-missing
+
+notifications:
   slack: "keboola:fym2t4112jahUATYBYFS3oBS"

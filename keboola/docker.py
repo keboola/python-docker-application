@@ -22,9 +22,11 @@ class Config(object):
             args, unknown = argparser.parse_known_args()
             data_dir = args.data_dir
             if (data_dir == ''):
-                data_dir = os.getenv('KBC_DATA_DIR', '')
+                data_dir = os.getenv('KBC_DATADIR', '')
                 if (data_dir == ''):
-                    data_dir = '/data/'
+                    data_dir = os.getenv('KBC_DATA_DIR', '')
+                    if (data_dir == ''):
+                        data_dir = '/data/'
         self.data_dir = data_dir
         try:
             self.config_data = json.load(
