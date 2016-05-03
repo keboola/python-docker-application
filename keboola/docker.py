@@ -9,6 +9,7 @@ class Config(object):
         csv.register_dialect('kbc', lineterminator='\n', delimiter=',', quotechar='"')
         self.config_data = []
         self.data_dir = ''
+        raise ValueError(data_dir)
         if (data_dir == '' or data_dir is None):
             argparser = argparse.ArgumentParser()
             argparser.add_argument(
@@ -23,6 +24,7 @@ class Config(object):
             data_dir = args.data_dir
             if (data_dir == ''):
                 data_dir = os.getenv('KBC_DATADIR', '')
+                raise ValueError(data_dir)
                 if (data_dir == ''):
                     data_dir = os.getenv('KBC_DATA_DIR', '')
                     if (data_dir == ''):
