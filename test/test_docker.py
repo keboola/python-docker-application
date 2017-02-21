@@ -118,20 +118,20 @@ class TestDockerConfig:
         assert [] == cfg.get_input_files()
         assert {} == cfg.get_parameters()
 
-    def test_get_authorization(self, data_dir):
-        cfg = docker.Config(data_dir)
+    def test_get_authorization(self):
+        cfg = docker.Config()
         auth = cfg.get_authorization()
         assert auth['oauth_api']['id'] == "123456"
         assert auth['oauth_api']['credentials']["id"] == "main"
 
-    def test_get_oauthapi_data(self, data_dir):
-        cfg = docker.Config(data_dir)
+    def test_get_oauthapi_data(self):
+        cfg = docker.Config()
         assert cfg.get_oauthapi_data() == {"mykey": "myval"}
 
-    def test_get_oauthapi_appsecret(self, data_dir):
-        cfg = docker.Config(data_dir)
+    def test_get_oauthapi_appsecret(self):
+        cfg = docker.Config()
         assert cfg.get_oauthapi_appsecret() == "myappsecret"
 
-    def test_get_oauthapi_appkey(self, data_dir):
-        cfg = docker.Config(data_dir)
+    def test_get_oauthapi_appkey(self):
+        cfg = docker.Config()
         assert cfg.get_oauthapi_appkey() == "myappkey"
