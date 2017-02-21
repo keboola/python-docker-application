@@ -114,6 +114,18 @@ class Config(object):
         else:
             return('')
 
+    def get_authorization(self):
+        """
+        Get authorization parameters passed to the application.
+
+        Returns:
+            Dict with authorization.
+        """
+        if ('authorization' in self.config_data):
+            return(self.config_data['authorization'])
+        else:
+            return({})
+
     def get_input_files(self):
         """
         Get names of input files. Returns fully classified pathnames.
@@ -242,3 +254,49 @@ class Config(object):
             String directory name.
         """
         return(self.data_dir)
+
+    def get_oauthapi_data(self):
+        """
+        Get OAuth authorization data passed to the application.
+
+        Returns:
+            Dict with oauth data.
+        """
+        authorization = self.get_authorization()
+        if ('oauth_api' in authorization and
+                'credentials' in authorization['oauth_api'] and
+                '#data' in authorization['oauth_api']['credentials']):
+            json_string = authorization['oauth_api']['credentials']['#data']
+            return(json.loads(json_string))
+        else:
+            return({})
+
+    def get_oauthapi_appsecret(self):
+        """
+        Get application secret from OAuth authorization
+
+        Returns:
+            string
+        """
+        authorization = self.get_authorization()
+        if ('oauth_api' in authorization and
+                'credentials' in authorization['oauth_api'] and
+                '#appSecret' in authorization['oauth_api']['credentials']):
+            return(authorization['oauth_api']['credentials']['#appSecret'])
+        else:
+            return('')
+
+    def get_oauthapi_appkey(self):
+        """
+        Get application key from OAuth authorization
+
+        Returns:
+            string
+        """
+        authorization = self.get_authorization()
+        if ('oauth_api' in authorization and
+                'credentials' in authorization['oauth_api'] and
+                'appKey' in authorization['oauth_api']['credentials']):
+            return(authorization['oauth_api']['credentials']['appKey'])
+        else:
+            return('')
