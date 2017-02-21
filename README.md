@@ -13,7 +13,14 @@ Installation
 pip install git+git://github.com/keboola/python-docker-application.git
 ```
 
+To upgrade existing installation use:
+
+```
+pip install --upgrade git+git://github.com/keboola/python-docker-application.git
+```
+
 Note that the library is already installed in production containers in KBC.
+
 
 Usage
 ============
