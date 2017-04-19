@@ -6,7 +6,7 @@ import csv
 
 class Config(object):
     def __init__(self, data_dir=''):
-        csv.register_dialect('kbc', lineterminator='\n', delimiter=',', quotechar='"')
+        self.register_csv_dialect()
         self.config_data = []
         self.data_dir = ''
         if (data_dir == '' or data_dir is None):
@@ -38,6 +38,18 @@ class Config(object):
                 "verify that the data directory is correct." +
                 "Dir: " + self.data_dir
             )
+
+    @staticmethod
+    def register_csv_dialect():
+        """Make registering dialect possible without instantiating whole class
+
+        i.e:
+        >>> Config.register_csv_dialect()
+        >>> import csv
+        >>> print(csv.list_dialects())
+        ['kbc', 'excel', 'excel-tab', 'unix']
+        """
+        csv.register_dialect('kbc', lineterminator='\n', delimiter=',', quotechar='"')
 
     def write_file_manifest(
             self,
