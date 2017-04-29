@@ -1,17 +1,10 @@
 language: python
 
 python:
-  - 2.7
   - 3.5
 
-env:
-  - KBC_DATADIR=$TRAVIS_BUILD_DIR/test/data1/
-
-install:
-  - pip install pytest-cov
-
 script:
-  - py.test --cov=keboola --cov-report term-missing
+  - python .\test\test_docker.py
 
 notifications:
   slack: keboola:NCe8LwHlAyQBD4KS8BM0JkuA
