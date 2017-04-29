@@ -3,7 +3,7 @@ import os
 import json
 import tempfile
 import csv
-from Keboola import docker
+from keboola import docker
 
 class TestDockerConfig(unittest.TestCase):
     def setUp(self):
