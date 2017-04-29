@@ -4,7 +4,7 @@ python:
   - 3.5
 
 script:
-  - python .\test\test_docker.py
+  - python test/test_docker.py
 
 notifications:
   slack: keboola:NCe8LwHlAyQBD4KS8BM0JkuA
