@@ -1,142 +1,151 @@
-import pytest
+import unittest
 import os
 import json
 import tempfile
 import csv
 from keboola import docker
 
+class TestDockerConfig(unittest.TestCase):
+    def setUp(self):
+        path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data1')
+        os.environ["KBC_DATADIR"] = path
 
-class TestDockerConfig:
     def test_missing_config(self):
-        try:
+        with self.assertRaisesRegex(ValueError, "Configuration file config.json not found"):
             docker.Config('/non-existent/')
-            pytest.xfail("Must raise exception.")
-        except (ValueError):
-            pass
 
     def test_missing_dir(self):
-        try:
+        os.environ["KBC_DATADIR"] = ""
+        with self.assertRaisesRegex(ValueError, "Configuration file config.json not found"):
             docker.Config()
-            pytest.xfail("Must raise exception.")
-        except (ValueError):
-            pass
 
     def test_get_parameters(self):
         cfg = docker.Config()
         params = cfg.get_parameters()
-        assert {'fooBar': {'bar': 24, 'foo': 42}, 'baz': 'bazBar'} == params
-        assert params['fooBar']['foo'] == 42
-        assert params['fooBar']['bar'] == 24
+        self.assertEqual({'fooBar': {'bar': 24, 'foo': 42}, 'baz': 'bazBar'}, params)
+        self.assertEqual(params['fooBar']['foo'], 42)
+        self.assertEqual(params['fooBar']['bar'], 24)
 
     def test_get_action(self):
         cfg = docker.Config()
         action = cfg.get_action()
-        assert action == 'test'
+        self.assertEqual(action, 'test')
 
     def test_get_action_empty_config(self):
-        cfg = docker.Config(os.getenv('KBC_DATADIR', '') + '/../data2/')
+        cfg = docker.Config(os.path.join(os.getenv('KBC_DATADIR', ''), '..', 'data2'))
         action = cfg.get_action()
-        assert action == ''
+        self.assertEqual(action, '')
 
     def test_get_data_dir(self):
         cfg = docker.Config()
-        assert os.getenv('KBC_DATADIR', '') == cfg.get_data_dir()
+        self.assertEqual(os.getenv('KBC_DATADIR', ''), cfg.get_data_dir())
 
     def test_file_manifest(self):
         cfg = docker.Config()
         some_file = os.path.join(tempfile.mkdtemp('kbc-test') + 'someFile.txt')
         cfg.write_file_manifest(some_file, file_tags=['foo', 'bar'], is_public=True, is_permanent=False, notify=True)
-        manifest_file = some_file + '.manifest'
-        config = json.load(open(manifest_file))
-        assert {'is_public': True, 'is_permanent': False, 'notify': True, 'tags': ['foo', 'bar']} == config
-        os.remove(manifest_file)
+        manifest_filename = some_file + '.manifest'
+        with open(manifest_filename) as manifest_file:
+            config = json.load(manifest_file)
+        self.assertEqual(
+            {'is_public': True, 'is_permanent': False, 'notify': True, 'tags': ['foo', 'bar']},
+            config
+        )
+        os.remove(manifest_filename)
 
     def test_table_manifest(self):
         cfg = docker.Config()
         some_file = os.path.join(tempfile.mkdtemp('kbc-test') + 'some-table.csv')
         cfg.write_table_manifest(some_file, 'out.c-main.some-table', primary_key=['foo', 'bar'])
-        manifest_file = some_file + '.manifest'
-        config = json.load(open(manifest_file))
-        assert {'destination': 'out.c-main.some-table', 'primary_key': ['foo', 'bar']} == config
-        os.remove(manifest_file)
+        manifest_filename = some_file + '.manifest'
+        with open(manifest_filename) as manifest_file:
+            config = json.load(manifest_file)
+        self.assertEqual(
+            {'destination': 'out.c-main.some-table', 'primary_key': ['foo', 'bar']},
+            config
+        )
+        os.remove(manifest_filename)
 
     def test_input_files(self):
         cfg = docker.Config()
         files = cfg.get_input_files()
-        assert len(files) == 5
-        assert '21702.strip.print.gif' == files[0][-21:]
+        self.assertEqual(len(files), 5)
+        self.assertEqual('21702.strip.print.gif', files[0][-21:])
 
     def test_get_expected_output_files(self):
         cfg = docker.Config()
         files = cfg.get_expected_output_files()
-        assert len(files) == 1
-        assert 'processed.png' == files[0]['source']
+        self.assertEqual(len(files), 1)
+        self.assertEqual('processed.png', files[0]['source'])
 
     def test_get_file_manifest(self):
         cfg = docker.Config()
         files = cfg.get_input_files()
         file1 = cfg.get_file_manifest(files[0])
-        assert 151971405 == file1['id']
-        assert '21702.strip.print.gif' == file1['name']
-        assert ['dilbert'] == file1['tags']
+        self.assertEqual(151971405, file1['id'])
+        self.assertEqual('21702.strip.print.gif', file1['name'])
+        self.assertEqual(['dilbert'], file1['tags'])
         file2 = cfg.get_file_manifest('151971405_21702.strip.print.gif')
-        assert file1 == file2
+        self.assertEqual(file1, file2)
 
     def test_get_input_tables(self):
         cfg = docker.Config()
         tables = cfg.get_input_tables()
 
-        assert 2 == len(tables)
+        self.assertEqual(len(tables), 2)
         for table in tables:
-            if (table['destination'] == 'sample.csv'):
-                assert 'in.c-main.test' == table['source']
-                assert os.path.isfile(table['full_path'])
+            if table['destination'] == 'sample.csv':
+                self.assertEqual(table['source'], 'in.c-main.test')
+                self.assertTrue(os.path.isfile(table['full_path']))
             else:
-                assert 'in.c-main.test2' == table['source']
-                assert os.path.isfile(table['full_path'])
+                self.assertEqual('in.c-main.test2', table['source'])
+                self.assertTrue(os.path.isfile(table['full_path']))
 
     def test_get_table_manifest(self):
         cfg = docker.Config()
         table1 = cfg.get_table_manifest('sample.csv')
-        assert 'in.c-main.test' == table1['id']
-        assert 13 == len(table1['columns'])
+        self.assertEqual('in.c-main.test', table1['id'])
+        self.assertEqual(len(table1['columns']), 13)
 
         table2 = cfg.get_table_manifest('sample')
-        assert table1 == table2
+        self.assertEqual(table1, table2)
 
     def test_get_output_tables(self):
         cfg = docker.Config()
         tables = cfg.get_expected_output_tables()
-        assert 2 == len(tables)
-        assert 'results.csv' == tables[0]['source']
-        assert 'results-new.csv' == tables[1]['source']
+        self.assertEqual(len(tables), 2)
+        self.assertEqual(tables[0]['source'], 'results.csv')
+        self.assertEqual(tables[1]['source'], 'results-new.csv')
 
     def test_empty_storage(self):
-        cfg = docker.Config(os.getenv('KBC_DATADIR', '') + '/../data2/')
-        assert [] == cfg.get_expected_output_tables()
-        assert [] == cfg.get_expected_output_files()
-        assert [] == cfg.get_input_tables()
-        assert [] == cfg.get_input_files()
-        assert {} == cfg.get_parameters()
+        cfg = docker.Config(os.path.join(os.getenv('KBC_DATADIR', ''), '..', 'data2'))
+        self.assertEqual(cfg.get_expected_output_tables(), [])
+        self.assertEqual(cfg.get_expected_output_files(), [])
+        self.assertEqual(cfg.get_input_tables(), [])
+        self.assertEqual(cfg.get_input_files(), [])
+        self.assertEqual(cfg.get_parameters(), {})
 
     def test_get_authorization(self):
         cfg = docker.Config()
         auth = cfg.get_authorization()
-        assert auth['oauth_api']['id'] == "123456"
-        assert auth['oauth_api']['credentials']["id"] == "main"
+        self.assertEqual(auth['oauth_api']['id'], "123456")
+        self.assertEqual(auth['oauth_api']['credentials']["id"], "main")
 
     def test_get_oauthapi_data(self):
         cfg = docker.Config()
-        assert cfg.get_oauthapi_data() == {"mykey": "myval"}
+        self.assertEqual(cfg.get_oauthapi_data(), {"mykey": "myval"})
 
     def test_get_oauthapi_appsecret(self):
         cfg = docker.Config()
-        assert cfg.get_oauthapi_appsecret() == "myappsecret"
+        self.assertEqual(cfg.get_oauthapi_appsecret(), "myappsecret")
 
     def test_get_oauthapi_appkey(self):
         cfg = docker.Config()
-        assert cfg.get_oauthapi_appkey() == "myappkey"
+        self.assertEqual(cfg.get_oauthapi_appkey(), "myappkey")
 
     def test_register_csv_dialect(self):
         docker.Config().register_csv_dialect()
-        assert "kbc" in csv.list_dialects()
+        self.assertIn("kbc", csv.list_dialects())
+
+if __name__ == '__main__':
+    unittest.main()

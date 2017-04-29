@@ -1,15 +1,25 @@
+"""
+Module representing common interface to KBC docker applications
+See docs: https://developers.keboola.com/extend/common-interface/
+"""
+
 import argparse
 import json
 import os
 import csv
 
-
 class Config(object):
+    """
+    Class representing configuration file and manifests generated and read
+    by KBC for docker applications
+    See docs: https://developers.keboola.com/extend/common-interface/config-file/
+    and https://developers.keboola.com/extend/common-interface/manifest-files/
+    """
     def __init__(self, data_dir=''):
         self.register_csv_dialect()
         self.config_data = []
         self.data_dir = ''
-        if (data_dir == '' or data_dir is None):
+        if data_dir == '' or data_dir is None:
             argparser = argparse.ArgumentParser()
             argparser.add_argument(
                 '-d',
@@ -21,17 +31,16 @@ class Config(object):
             # unknown is to ignore extra arguments
             args, unknown = argparser.parse_known_args()
             data_dir = args.data_dir
-            if (data_dir == ''):
+            if data_dir == '':
                 data_dir = os.getenv('KBC_DATADIR', '')
-                if (data_dir == ''):
+                if data_dir == '':
                     data_dir = os.getenv('KBC_DATA_DIR', '')
-                    if (data_dir == ''):
+                    if data_dir == '':
                         data_dir = '/data/'
         self.data_dir = data_dir
         try:
-            self.config_data = json.load(
-                open(os.path.join(data_dir, 'config.json'), 'r')
-            )
+            with open(os.path.join(data_dir, 'config.json'), 'r') as config_file:
+                self.config_data = json.load(config_file)
         except (OSError, IOError):
             raise ValueError(
                 "Configuration file config.json not found, " +
@@ -39,7 +48,8 @@ class Config(object):
                 "Dir: " + self.data_dir
             )
 
-    def register_csv_dialect(self):
+    @staticmethod
+    def register_csv_dialect():
         """
         Register the KBC CSV dialect
         """
@@ -48,7 +58,7 @@ class Config(object):
     def write_file_manifest(
             self,
             file_name,
-            file_tags=[],
+            file_tags=None,
             is_public=False,
             is_permanent=True,
             notify=False):
@@ -66,6 +76,7 @@ class Config(object):
             notify: True if members of the project should be notified
                 about the file upload.
         """
+        file_tags = file_tags or []
         manifest = {
             'is_permanent': is_permanent,
             'is_public': is_public,
@@ -79,7 +90,7 @@ class Config(object):
             self,
             file_name,
             destination,
-            primary_key=[]):
+            primary_key=None):
         """
         Write manifest for output table Manifest is used for
         the table to be stored in KBC Storage.
@@ -89,6 +100,7 @@ class Config(object):
             destination: String name of the table in Storage.
             primary_key: List with names of columns used for primary key.
         """
+        primary_key = primary_key or []
         manifest = {
             'destination': destination,
             'primary_key': primary_key
@@ -103,10 +115,9 @@ class Config(object):
         Returns:
             Dict with parameters.
         """
-        if ('parameters' in self.config_data):
-            return(self.config_data['parameters'])
-        else:
-            return({})
+        if 'parameters' in self.config_data:
+            return self.config_data['parameters']
+        return {}
 
     def get_action(self):
         """
@@ -115,10 +126,9 @@ class Config(object):
         Returns:
             String.
         """
-        if ('action' in self.config_data):
-            return(self.config_data['action'])
-        else:
-            return('')
+        if 'action' in self.config_data:
+            return self.config_data['action']
+        return ''
 
     def get_authorization(self):
         """
@@ -127,10 +137,9 @@ class Config(object):
         Returns:
             Dict with authorization.
         """
-        if ('authorization' in self.config_data):
-            return(self.config_data['authorization'])
-        else:
-            return({})
+        if 'authorization' in self.config_data:
+            return self.config_data['authorization']
+        return {}
 
     def get_input_files(self):
         """
@@ -160,12 +169,12 @@ class Config(object):
         """
         file_name = os.path.normpath(file_name)
         base_dir = os.path.normpath(os.path.join(self.data_dir, 'in', 'files'))
-        if (file_name[0:len(base_dir)] != base_dir):
+        if file_name[0:len(base_dir)] != base_dir:
             file_name = os.path.join(base_dir, file_name)
 
-        manifest_path = file_name + '.manifest'
-        manifest = json.load(open(manifest_path))
-        return(manifest)
+        with open(file_name + '.manifest') as manifest_file:
+            manifest = json.load(manifest_file)
+        return manifest
 
     def get_expected_output_files(self):
         """
@@ -179,9 +188,8 @@ class Config(object):
                 ('output' in self.config_data['storage']) and
                 ('files') in self.config_data['storage']['output']):
             files = self.config_data['storage']['output']['files']
-            return(files)
-        else:
-            return([])
+            return files
+        return []
 
     def get_input_tables(self):
         """
@@ -204,9 +212,8 @@ class Config(object):
                         table['destination']
                     )
                 )
-            return(tables)
-        else:
-            return([])
+            return tables
+        return []
 
     def get_table_manifest(self, table_name):
         """
@@ -218,7 +225,7 @@ class Config(object):
         Returns:
             List with manifest options.
         """
-        if (table_name[-4:] != '.csv'):
+        if table_name[-4:] != '.csv':
             table_name += '.csv'
         manifest_path = os.path.join(
             self.data_dir,
@@ -226,8 +233,9 @@ class Config(object):
             'tables',
             table_name + '.manifest'
         )
-        manifest = json.load(open(manifest_path))
-        return(manifest)
+        with open(manifest_path) as manifest_file:
+            manifest = json.load(manifest_file)
+        return manifest
 
     def get_expected_output_tables(self):
         """
@@ -248,9 +256,8 @@ class Config(object):
                     'tables',
                     table['source']
                 )
-            return(tables)
-        else:
-            return([])
+            return tables
+        return []
 
     def get_data_dir(self):
         """
@@ -259,7 +266,7 @@ class Config(object):
         Returns:
             String directory name.
         """
-        return(self.data_dir)
+        return self.data_dir
 
     def get_oauthapi_data(self):
         """
@@ -273,9 +280,8 @@ class Config(object):
                 'credentials' in authorization['oauth_api'] and
                 '#data' in authorization['oauth_api']['credentials']):
             json_string = authorization['oauth_api']['credentials']['#data']
-            return(json.loads(json_string))
-        else:
-            return({})
+            return json.loads(json_string)
+        return {}
 
     def get_oauthapi_appsecret(self):
         """
@@ -288,9 +294,8 @@ class Config(object):
         if ('oauth_api' in authorization and
                 'credentials' in authorization['oauth_api'] and
                 '#appSecret' in authorization['oauth_api']['credentials']):
-            return(authorization['oauth_api']['credentials']['#appSecret'])
-        else:
-            return('')
+            return authorization['oauth_api']['credentials']['#appSecret']
+        return ''
 
     def get_oauthapi_appkey(self):
         """
@@ -303,6 +308,5 @@ class Config(object):
         if ('oauth_api' in authorization and
                 'credentials' in authorization['oauth_api'] and
                 'appKey' in authorization['oauth_api']['credentials']):
-            return(authorization['oauth_api']['credentials']['appKey'])
-        else:
-            return('')
+            return authorization['oauth_api']['credentials']['appKey']
+        return ''
