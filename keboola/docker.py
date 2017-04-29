@@ -6,7 +6,7 @@ import csv
 
 class Config(object):
     def __init__(self, data_dir=''):
-        csv.register_dialect('kbc', lineterminator='\n', delimiter=',', quotechar='"')
+        self.register_csv_dialect()
         self.config_data = []
         self.data_dir = ''
         if (data_dir == '' or data_dir is None):
@@ -38,6 +38,12 @@ class Config(object):
                 "verify that the data directory is correct." +
                 "Dir: " + self.data_dir
             )
+
+    def register_csv_dialect(self):
+        """
+        Register the KBC CSV dialect
+        """
+        csv.register_dialect('kbc', lineterminator='\n', delimiter=',', quotechar='"')
 
     def write_file_manifest(
             self,

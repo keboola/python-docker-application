@@ -2,6 +2,7 @@ import pytest
 import os
 import json
 import tempfile
+import csv
 from keboola import docker
 
 
@@ -135,3 +136,7 @@ class TestDockerConfig:
     def test_get_oauthapi_appkey(self):
         cfg = docker.Config()
         assert cfg.get_oauthapi_appkey() == "myappkey"
+
+    def test_register_csv_dialect(self):
+        docker.Config().register_csv_dialect()
+        assert "kbc" in csv.list_dialects()
