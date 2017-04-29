@@ -14,4 +14,4 @@ script:
   - py.test --cov=keboola --cov-report term-missing
 
 notifications:
-  slack: "keboola:fym2t4112jahUATYBYFS3oBS"
+  slack: keboola:NCe8LwHlAyQBD4KS8BM0JkuA
