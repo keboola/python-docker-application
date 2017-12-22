@@ -120,7 +120,8 @@ class Config(object):
         Returns:
             Dict with parameters.
         """
-        if 'parameters' in self.config_data:
+        if 'parameters' in self.config_data and \
+                isinstance(self.config_data['parameters'], dict):
             return self.config_data['parameters']
         return {}
 

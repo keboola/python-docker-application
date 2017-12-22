@@ -140,6 +140,13 @@ class TestDockerConfig(unittest.TestCase):
         self.assertEqual(cfg.get_input_files(), [])
         self.assertEqual(cfg.get_parameters(), {})
 
+    def test_empty_params(self):
+        cfg = docker.Config(os.path.join(os.getenv('KBC_DATADIR', ''), '..',
+                                         'data3'))
+        self.assertEqual([], cfg.get_expected_output_tables())
+        self.assertEqual([], cfg.get_expected_output_files())
+        self.assertEqual({}, cfg.get_parameters())
+
     def test_get_authorization(self):
         cfg = docker.Config()
         auth = cfg.get_authorization()
