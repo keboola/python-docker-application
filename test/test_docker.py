@@ -5,24 +5,31 @@ import tempfile
 import csv
 from keboola import docker
 
+
 class TestDockerConfig(unittest.TestCase):
     def setUp(self):
-        path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'data1')
+        path = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                            'data1')
         os.environ["KBC_DATADIR"] = path
 
     def test_missing_config(self):
-        with self.assertRaisesRegex(ValueError, "Configuration file config.json not found"):
+        with self.assertRaisesRegex(
+                ValueError,
+                "Configuration file config.json not found"):
             docker.Config('/non-existent/')
 
     def test_missing_dir(self):
         os.environ["KBC_DATADIR"] = ""
-        with self.assertRaisesRegex(ValueError, "Configuration file config.json not found"):
+        with self.assertRaisesRegex(
+                ValueError,
+                "Configuration file config.json not found"):
             docker.Config()
 
     def test_get_parameters(self):
         cfg = docker.Config()
         params = cfg.get_parameters()
-        self.assertEqual({'fooBar': {'bar': 24, 'foo': 42}, 'baz': 'bazBar'}, params)
+        self.assertEqual({'fooBar': {'bar': 24, 'foo': 42}, 'baz': 'bazBar'},
+                         params)
         self.assertEqual(params['fooBar']['foo'], 42)
         self.assertEqual(params['fooBar']['bar'], 24)
 
@@ -32,7 +39,8 @@ class TestDockerConfig(unittest.TestCase):
         self.assertEqual(action, 'test')
 
     def test_get_action_empty_config(self):
-        cfg = docker.Config(os.path.join(os.getenv('KBC_DATADIR', ''), '..', 'data2'))
+        cfg = docker.Config(os.path.join(os.getenv('KBC_DATADIR', ''), '..',
+                                         'data2'))
         action = cfg.get_action()
         self.assertEqual(action, '')
 
@@ -43,25 +51,31 @@ class TestDockerConfig(unittest.TestCase):
     def test_file_manifest(self):
         cfg = docker.Config()
         some_file = os.path.join(tempfile.mkdtemp('kbc-test') + 'someFile.txt')
-        cfg.write_file_manifest(some_file, file_tags=['foo', 'bar'], is_public=True, is_permanent=False, notify=True)
+        cfg.write_file_manifest(some_file, file_tags=['foo', 'bar'],
+                                is_public=True, is_permanent=False,
+                                notify=True)
         manifest_filename = some_file + '.manifest'
         with open(manifest_filename) as manifest_file:
             config = json.load(manifest_file)
         self.assertEqual(
-            {'is_public': True, 'is_permanent': False, 'notify': True, 'tags': ['foo', 'bar']},
+            {'is_public': True, 'is_permanent': False, 'notify': True,
+             'tags': ['foo', 'bar']},
             config
         )
         os.remove(manifest_filename)
 
     def test_table_manifest(self):
         cfg = docker.Config()
-        some_file = os.path.join(tempfile.mkdtemp('kbc-test') + 'some-table.csv')
-        cfg.write_table_manifest(some_file, 'out.c-main.some-table', primary_key=['foo', 'bar'])
+        some_file = os.path.join(tempfile.mkdtemp('kbc-test')
+                                 + 'some-table.csv')
+        cfg.write_table_manifest(some_file, 'out.c-main.some-table',
+                                 primary_key=['foo', 'bar'])
         manifest_filename = some_file + '.manifest'
         with open(manifest_filename) as manifest_file:
             config = json.load(manifest_file)
         self.assertEqual(
-            {'destination': 'out.c-main.some-table', 'primary_key': ['foo', 'bar']},
+            {'destination': 'out.c-main.some-table',
+             'primary_key': ['foo', 'bar']},
             config
         )
         os.remove(manifest_filename)
@@ -118,7 +132,8 @@ class TestDockerConfig(unittest.TestCase):
         self.assertEqual(tables[1]['source'], 'results-new.csv')
 
     def test_empty_storage(self):
-        cfg = docker.Config(os.path.join(os.getenv('KBC_DATADIR', ''), '..', 'data2'))
+        cfg = docker.Config(os.path.join(os.getenv('KBC_DATADIR', ''), '..',
+                                         'data2'))
         self.assertEqual(cfg.get_expected_output_tables(), [])
         self.assertEqual(cfg.get_expected_output_files(), [])
         self.assertEqual(cfg.get_input_tables(), [])
@@ -146,6 +161,7 @@ class TestDockerConfig(unittest.TestCase):
     def test_register_csv_dialect(self):
         docker.Config().register_csv_dialect()
         self.assertIn("kbc", csv.list_dialects())
+
 
 if __name__ == '__main__':
     unittest.main()

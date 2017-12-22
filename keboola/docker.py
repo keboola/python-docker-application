@@ -8,11 +8,13 @@ import json
 import os
 import csv
 
+
 class Config(object):
     """
     Class representing configuration file and manifests generated and read
     by KBC for docker applications
-    See docs: https://developers.keboola.com/extend/common-interface/config-file/
+    See docs:
+    https://developers.keboola.com/extend/common-interface/config-file/
     and https://developers.keboola.com/extend/common-interface/manifest-files/
     """
     def __init__(self, data_dir=''):
@@ -39,7 +41,8 @@ class Config(object):
                         data_dir = '/data/'
         self.data_dir = data_dir
         try:
-            with open(os.path.join(data_dir, 'config.json'), 'r') as config_file:
+            with open(os.path.join(data_dir, 'config.json'), 'r') \
+                    as config_file:
                 self.config_data = json.load(config_file)
         except (OSError, IOError):
             raise ValueError(
@@ -53,10 +56,11 @@ class Config(object):
         """
         Register the KBC CSV dialect
         """
-        csv.register_dialect('kbc', lineterminator='\n', delimiter=',', quotechar='"')
+        csv.register_dialect('kbc', lineterminator='\n', delimiter=',',
+                             quotechar='"')
 
+    @staticmethod
     def write_file_manifest(
-            self,
             file_name,
             file_tags=None,
             is_public=False,
@@ -68,7 +72,8 @@ class Config(object):
         accessible as config_data property.
 
         Args:
-            file_name: Local file name of the file to be stored, including path.
+            file_name: Local file name of the file to be stored,
+                including path.
             file_tags: List of file tags.
             is_public: True if the file should be stored as public.
             is_permanent: False if the file should be stored only temporarily
@@ -86,8 +91,8 @@ class Config(object):
         with open(file_name + '.manifest', 'w') as manifest_file:
             json.dump(manifest, manifest_file)
 
+    @staticmethod
     def write_table_manifest(
-            self,
             file_name,
             destination,
             primary_key=None):
@@ -186,7 +191,7 @@ class Config(object):
         """
         if (('storage' in self.config_data) and
                 ('output' in self.config_data['storage']) and
-                ('files') in self.config_data['storage']['output']):
+                ('files' in self.config_data['storage']['output'])):
             files = self.config_data['storage']['output']['files']
             return files
         return []
@@ -201,7 +206,7 @@ class Config(object):
         """
         if (('storage' in self.config_data) and
                 ('input' in self.config_data['storage']) and
-                ('tables') in self.config_data['storage']['input']):
+                ('tables' in self.config_data['storage']['input'])):
             tables = self.config_data['storage']['input']['tables']
             for table in tables:
                 table['full_path'] = os.path.normpath(
@@ -247,7 +252,7 @@ class Config(object):
         """
         if (('storage' in self.config_data) and
                 ('output' in self.config_data['storage']) and
-                ('tables') in self.config_data['storage']['output']):
+                ('tables' in self.config_data['storage']['output'])):
             tables = self.config_data['storage']['output']['tables']
             for table in tables:
                 table['full_path'] = os.path.join(

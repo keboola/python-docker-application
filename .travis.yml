@@ -5,8 +5,10 @@ python:
 
 install:
   - python setup.py install
+  - pip install flake8
 
 script:
+  - flake8
   - python test/test_docker.py
 
 notifications:
