@@ -4,19 +4,19 @@ Python Docker application
 [![Build Status](https://travis-ci.org/keboola/python-docker-application.svg?branch=master)](https://travis-ci.org/keboola/python-docker-application)
 [![Code Climate](https://codeclimate.com/github/keboola/python-docker-application/badges/gpa.svg)](https://codeclimate.com/github/keboola/python-docker-application)
 
-General library for python application running in KBC. The library provides function related to [docker-bundle](https://github.com/keboola/docker-bundle).
+General library for python application running in KBC. The library provides function related to [Docke Runner](https://github.com/keboola/docker-bundle).
 
 Installation
 ===============
 
 ```
-pip install git+git://github.com/keboola/python-docker-application.git
+pip3 install git+git://github.com/keboola/python-docker-application.git
 ```
 
 To upgrade existing installation use:
 
 ```
-pip install --upgrade git+git://github.com/keboola/python-docker-application.git
+pip3 install --upgrade --force-reinstall git+git://github.com/keboola/python-docker-application.git@2.0.0
 ```
 
 Note that the library is already installed in production containers in KBC.
