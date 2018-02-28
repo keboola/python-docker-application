@@ -94,7 +94,7 @@ class Config(object):
     @staticmethod
     def write_table_manifest(
             file_name,
-            destination,
+            destination='',
             primary_key=None):
         """
         Write manifest for output table Manifest is used for
@@ -231,8 +231,6 @@ class Config(object):
         Returns:
             List with manifest options.
         """
-        if table_name[-4:] != '.csv':
-            table_name += '.csv'
         manifest_path = os.path.join(
             self.data_dir,
             'in',

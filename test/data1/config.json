@@ -25,7 +25,7 @@
                 },
                 {
                     "source": "in.c-main.test2",
-                    "destination": "fooBar.csv",
+                    "destination": "fooBar",
                     "columns": [],
                     "where_values": [],
                     "where_operator": "eq"

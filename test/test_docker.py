@@ -115,14 +115,17 @@ class TestDockerConfig(unittest.TestCase):
                 self.assertEqual('in.c-main.test2', table['source'])
                 self.assertTrue(os.path.isfile(table['full_path']))
 
-    def test_get_table_manifest(self):
+    def test_get_table_manifest_csv(self):
         cfg = docker.Config()
         table1 = cfg.get_table_manifest('sample.csv')
         self.assertEqual('in.c-main.test', table1['id'])
         self.assertEqual(len(table1['columns']), 13)
 
-        table2 = cfg.get_table_manifest('sample')
-        self.assertEqual(table1, table2)
+    def test_get_table_manifest(self):
+        cfg = docker.Config()
+        table1 = cfg.get_table_manifest('foobar')
+        self.assertEqual('in.c-main.test2', table1['id'])
+        self.assertEqual(len(table1['columns']), 2)
 
     def test_get_output_tables(self):
         cfg = docker.Config()
