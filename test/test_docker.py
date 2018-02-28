@@ -123,7 +123,7 @@ class TestDockerConfig(unittest.TestCase):
 
     def test_get_table_manifest(self):
         cfg = docker.Config()
-        table1 = cfg.get_table_manifest('foobar')
+        table1 = cfg.get_table_manifest('fooBar')
         self.assertEqual('in.c-main.test2', table1['id'])
         self.assertEqual(len(table1['columns']), 2)
 
