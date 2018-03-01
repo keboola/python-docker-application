@@ -91,11 +91,16 @@ class Config(object):
         with open(file_name + '.manifest', 'w') as manifest_file:
             json.dump(manifest, manifest_file)
 
-    @staticmethod
     def write_table_manifest(
+            self,
             file_name,
             destination='',
-            primary_key=None):
+            primary_key=None,
+            columns=None,
+            incremental=None,
+            metadata=None,
+            column_metadata=None,
+            delete_where=None):
         """
         Write manifest for output table Manifest is used for
         the table to be stored in KBC Storage.
@@ -104,14 +109,118 @@ class Config(object):
             file_name: Local file name of the CSV with table data.
             destination: String name of the table in Storage.
             primary_key: List with names of columns used for primary key.
+            columns: List of columns for headless CSV files
+            incremental: Set to true to enable incremental loading
+            metadata: Dictionary of table metadata keys and values
+            column_metadata: Dict of dict of column metadata keys and values
+            delete_where: Dict with settings for deleting rows
         """
-        primary_key = primary_key or []
-        manifest = {
-            'destination': destination,
-            'primary_key': primary_key
-        }
+        manifest = {}
+        if destination:
+            if isinstance(destination, str):
+                manifest['destination'] = destination
+            else:
+                raise TypeError("Destination must be a string")
+        if primary_key:
+            if isinstance(primary_key, list):
+                manifest['primary_key'] = primary_key
+            else:
+                raise TypeError("Primary key must be a list")
+        if columns:
+            if isinstance(columns, list):
+                manifest['columns'] = columns
+            else:
+                raise TypeError("Columns must by a list")
+        if incremental:
+            manifest['incremental'] = True
+        manifest = self.process_metadata(manifest, metadata)
+        manifest = self.process_column_metadata(manifest, column_metadata)
+        manifest = self.process_delete(manifest, delete_where)
         with open(file_name + '.manifest', 'w') as manifest_file:
             json.dump(manifest, manifest_file)
+
+    @staticmethod
+    def process_metadata(manifest, metadata=None):
+        """
+        Process metadata as dictionary and returns modified manifest
+
+        Args:
+            manifest: Manifest dict
+            metadata: Dictionary of table metadata keys and values
+
+        Returns:
+            Manifest dict
+        """
+        if metadata:
+            manifest['metadata'] = []
+            if isinstance(metadata, dict):
+                for key in metadata:
+                    manifest['metadata'].append({
+                        'key': key,
+                        'value': metadata[key]
+                    })
+            else:
+                raise TypeError("Metadata must by a dict")
+        return manifest
+
+    @staticmethod
+    def process_column_metadata(manifest, column_metadata=None):
+        """
+        Process metadata as dictionary and returns modified manifest
+
+        Args:
+            manifest: Manifest dict
+            column_metadata: Dictionary of table metadata keys and values
+
+        Returns:
+            Manifest dict
+        """
+        if column_metadata:
+            manifest['column_metadata'] = {}
+            if isinstance(column_metadata, dict):
+                for column in column_metadata:
+                    manifest['column_metadata'][column] = []
+                    if isinstance(column_metadata[column], dict):
+                        for key in column_metadata[column]:
+                            manifest['column_metadata'][column].append({
+                                'key': key,
+                                'value': column_metadata[column][key]
+                            })
+                    else:
+                        raise TypeError("Column metadata must be a dict of "
+                                        "dicts indexed by column name")
+            else:
+                raise TypeError("Column metadata must be a dict")
+        return manifest
+
+    @staticmethod
+    def process_delete(manifest, delete_where):
+        """
+        Process metadata as dictionary and returns modified manifest
+
+        Args:
+            manifest: Manifest dict
+            delete_where: Dictionary of where condition specification
+
+        Returns:
+            Manifest dict
+        """
+        if delete_where:
+            if 'column' in delete_where and 'values' in delete_where:
+                if not isinstance(delete_where['column'], str):
+                    raise TypeError("Delete column must be a string")
+                if not isinstance(delete_where['values'], list):
+                    raise TypeError("Delete values must be a list")
+                op = delete_where['operator'] or 'eq'
+                if (not op == 'eq') and (not op == 'neq'):
+                    raise ValueError("Delete operator must be 'eq' or 'neq'")
+                manifest['delete_where_values'] = delete_where['values']
+                manifest['delete_where_column'] = delete_where['column']
+                manifest['delete_where_operator'] = op
+            else:
+                raise ValueError("Delete where specification must contain "
+                                 "keys 'column' and 'values'")
+        return manifest
 
     def get_parameters(self):
         """

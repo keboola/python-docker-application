@@ -64,21 +64,121 @@ class TestDockerConfig(unittest.TestCase):
         )
         os.remove(manifest_filename)
 
-    def test_table_manifest(self):
+    def test_table_manifest_minimal(self):
         cfg = docker.Config()
         some_file = os.path.join(tempfile.mkdtemp('kbc-test')
                                  + 'some-table.csv')
-        cfg.write_table_manifest(some_file, 'out.c-main.some-table',
-                                 primary_key=['foo', 'bar'])
+        cfg.write_table_manifest(some_file, primary_key=['foo', 'bar'])
         manifest_filename = some_file + '.manifest'
         with open(manifest_filename) as manifest_file:
             config = json.load(manifest_file)
         self.assertEqual(
-            {'destination': 'out.c-main.some-table',
-             'primary_key': ['foo', 'bar']},
+            {
+                'primary_key': ['foo', 'bar']
+            },
             config
         )
         os.remove(manifest_filename)
+
+    def test_table_manifest_full(self):
+        cfg = docker.Config()
+        some_file = os.path.join(tempfile.mkdtemp('kbc-test')
+                                 + 'some-table.csv')
+        cfg.write_table_manifest(some_file, columns=['foo', 'bar'],
+                                 destination='some-destination',
+                                 primary_key=['foo'],
+                                 incremental=True, metadata={'bar': 'kochba'},
+                                 column_metadata={'bar': {'foo': 'gogo'}},
+                                 delete_where={'column': 'lilly',
+                                               'values': ['a', 'b'],
+                                               'operator': 'eq'}
+                                 )
+        manifest_filename = some_file + '.manifest'
+        from shutil import copyfile
+        copyfile(manifest_filename, "D:\hovno")
+        with open(manifest_filename) as manifest_file:
+            config = json.load(manifest_file)
+        self.assertEqual(
+            {
+                'destination': 'some-destination',
+                'columns': ['foo', 'bar'],
+                'primary_key': ['foo'],
+                'incremental': True,
+                'metadata': [{'key': 'bar', 'value': 'kochba'}],
+                'column_metadata': {'bar': [{'key': 'foo', 'value': 'gogo'}]},
+                'delete_where_column': 'lilly',
+                'delete_where_values': ['a', 'b'],
+                'delete_where_operator': 'eq'
+            },
+            config
+        )
+        os.remove(manifest_filename)
+
+    def test_table_manifest_error_destination(self):
+        cfg = docker.Config()
+        some_file = os.path.join(tempfile.mkdtemp('kbc-test')
+                                 + 'some-table.csv')
+        with self.assertRaises(TypeError):
+            cfg.write_table_manifest(some_file, destination=['foo', 'bar'])
+
+    def test_table_manifest_error_primary_key(self):
+        cfg = docker.Config()
+        some_file = os.path.join(tempfile.mkdtemp('kbc-test')
+                                 + 'some-table.csv')
+        with self.assertRaises(TypeError):
+            cfg.write_table_manifest(some_file, primary_key="column")
+
+    def test_table_manifest_error_columns(self):
+        cfg = docker.Config()
+        some_file = os.path.join(tempfile.mkdtemp('kbc-test')
+                                 + 'some-table.csv')
+        with self.assertRaises(TypeError):
+            cfg.write_table_manifest(some_file, columns="column")
+
+    def test_table_manifest_error_metadata(self):
+        cfg = docker.Config()
+        some_file = os.path.join(tempfile.mkdtemp('kbc-test')
+                                 + 'some-table.csv')
+        with self.assertRaises(TypeError):
+            cfg.write_table_manifest(some_file, metadata=["a", "b"])
+
+    def test_table_manifest_error_column_metadata_1(self):
+        cfg = docker.Config()
+        some_file = os.path.join(tempfile.mkdtemp('kbc-test')
+                                 + 'some-table.csv')
+        with self.assertRaises(TypeError):
+            cfg.write_table_manifest(some_file, column_metadata=["a", "b"])
+
+    def test_table_manifest_error_column_metadata_2(self):
+        cfg = docker.Config()
+        some_file = os.path.join(tempfile.mkdtemp('kbc-test')
+                                 + 'some-table.csv')
+        with self.assertRaises(TypeError):
+            cfg.write_table_manifest(some_file, column_metadata={"a": "b"})
+
+    def test_table_manifest_error_column_delete_1(self):
+        cfg = docker.Config()
+        some_file = os.path.join(tempfile.mkdtemp('kbc-test')
+                                 + 'some-table.csv')
+        with self.assertRaises(ValueError):
+            cfg.write_table_manifest(some_file, delete_where={"a": "b"})
+
+    def test_table_manifest_error_column_delete_2(self):
+        cfg = docker.Config()
+        some_file = os.path.join(tempfile.mkdtemp('kbc-test')
+                                 + 'some-table.csv')
+        with self.assertRaises(TypeError):
+            cfg.write_table_manifest(some_file, delete_where={"column": "a",
+                                                              "values": "b"})
+
+    def test_table_manifest_error_column_delete_3(self):
+        cfg = docker.Config()
+        some_file = os.path.join(tempfile.mkdtemp('kbc-test')
+                                 + 'some-table.csv')
+        with self.assertRaises(TypeError):
+            cfg.write_table_manifest(some_file, delete_where={"column": "a",
+                                                              "values": "b",
+                                                              "operator": "c"})
 
     def test_input_files(self):
         cfg = docker.Config()
