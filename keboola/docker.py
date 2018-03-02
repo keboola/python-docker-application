@@ -212,8 +212,8 @@ class Config(object):
                 if not isinstance(delete_where['values'], list):
                     raise TypeError("Delete values must be a list")
                 op = delete_where['operator'] or 'eq'
-                if (not op == 'eq') and (not op == 'neq'):
-                    raise ValueError("Delete operator must be 'eq' or 'neq'")
+                if (not op == 'eq') and (not op == 'ne'):
+                    raise ValueError("Delete operator must be 'eq' or 'ne'")
                 manifest['delete_where_values'] = delete_where['values']
                 manifest['delete_where_column'] = delete_where['column']
                 manifest['delete_where_operator'] = op
