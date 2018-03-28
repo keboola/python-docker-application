@@ -94,8 +94,6 @@ class TestDockerConfig(unittest.TestCase):
                                                'operator': 'eq'}
                                  )
         manifest_filename = some_file + '.manifest'
-        from shutil import copyfile
-        copyfile(manifest_filename, "D:\hovno")
         with open(manifest_filename) as manifest_file:
             config = json.load(manifest_file)
         self.assertEqual(
