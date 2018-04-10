@@ -10,13 +10,13 @@ Installation
 ===============
 
 ```
-pip3 install git+git://github.com/keboola/python-docker-application.git
+pip3 install https://github.com/keboola/python-docker-application/zipball/master
 ```
 
 To upgrade existing installation use:
 
 ```
-pip3 install --upgrade --force-reinstall git+git://github.com/keboola/python-docker-application.git@2.0.0
+pip3 install --upgrade --force-reinstall https://github.com/keboola/python-docker-application/zipball/2.1.1
 ```
 
 Note that the library is already installed in production containers in KBC.
