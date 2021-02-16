@@ -1,6 +1,11 @@
 Python Docker application
 -----------------
 
+## NOTICE
+
+**This project is no longer maintained. The new version of the library is available at:** 
+**[keboola.component PYPI project](https://pypi.org/project/keboola.component)**
+
 [![Build Status](https://travis-ci.org/keboola/python-docker-application.svg?branch=master)](https://travis-ci.org/keboola/python-docker-application)
 [![Code Climate](https://codeclimate.com/github/keboola/python-docker-application/badges/gpa.svg)](https://codeclimate.com/github/keboola/python-docker-application)
 
